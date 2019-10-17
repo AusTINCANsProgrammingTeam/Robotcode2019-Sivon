@@ -15,12 +15,15 @@ import frc.robot.commands.DriveMode;
 import frc.robot.subsystems.GearMode;
 import frc.robot.commands.OperatorControl;
 import frc.robot.subsystems.Arm;
-//import com.revrobotics.CANSparkMax;
 import frc.robot.commands.MoveLiftUp;
 import frc.robot.commands.MoveLiftDown;
+import frc.robot.subsystems.SparkMaxGroup;
 
 //import frc.robot.LoggingSystem;
 import java.util.logging.Logger;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class Robot extends TimedRobot {
     private SendableChooser<Double> autoChooser;
-    //private CANSparkMax m_motor;
+    private CANSparkMax m_motor;
     private static final Logger LOGGER = Logger.getLogger(Robot.class.getName());
     //private static final LoggingSystem LOGGING_SYSTEM = LoggingSystem.getInstance();
 
@@ -75,78 +78,30 @@ public class Robot extends TimedRobot {
         autoChooser.addOption("2.50", 2.50);
         autoChooser.addOption("2.75", 2.75);
         autoChooser.addOption("3.0", 3.5);
-    }
-        /*
-            TO DO THIS IS WHAT YOU COPY OR PASTE TO ADD MORE DATA
-            autoChooser.addObject("#.#", #.#);
-        SmartDashboard.putData("Time to run forward in auto!", autoChooser);
 
-        // Initialize the drive subsystem.
         driveSubsystem = new ExampleSubsystem(
-                new TalonSRXGroup(
-                        new WPI_TalonSRX(RobotMap.LEFT_MOTOR_1), // This motor is the master for the left side.
-                        new WPI_TalonSRX(RobotMap.LEFT_MOTOR_2),
-                        new WPI_TalonSRX(RobotMap.LEFT_MOTOR_3)
-                ),
-                new TalonSRXGroup(
-                        new WPI_TalonSRX(RobotMap.RIGHT_MOTOR_1), // This motor is the master for the right side.
-                        new WPI_TalonSRX(RobotMap.RIGHT_MOTOR_2),
-                        new WPI_TalonSRX(RobotMap.RIGHT_MOTOR_3)
-                ),
+            new SparkMaxGroup(
+                new CANSparkMax(RobotMap.LEFT_MOTOR_1, MotorType.kBrushless), // This motor is the master for the left side.
+                new CANSparkMax(RobotMap.LEFT_MOTOR_2, MotorType.kBrushless),
+                new CANSparkMax(RobotMap.LEFT_MOTOR_3, MotorType.kBrushless)
+        ),
+            new SparkMaxGroup(
+                new CANSparkMax(RobotMap.RIGHT_MOTOR_1, MotorType.kBrushless), // This motor is the master for the right side.
+                new CANSparkMax(RobotMap.RIGHT_MOTOR_2, MotorType.kBrushless),
+                new CANSparkMax(RobotMap.RIGHT_MOTOR_3, MotorType.kBrushless)
+        ),
                 new DoubleSolenoid(RobotMap.PCM_ADDRESS, RobotMap.GEARBOX_FORWARD_CHANNEL,
-                        RobotMap.GEARBOX_REVERSE_CHANNEL)
-        );
-        LOGGER.info("Drive Subsystem Initialized properly!");
-        // Initialize the lift subsystem.
-        liftSubsystem = new Arm(
-            m_motor = new CANSparkMax(deviceID, MotorType.kBrushless)
-           
-               //new SpeedControllerGroup(
-                 //       new Spark(RobotMap.LIFT_MOTOR_1),
-                   //     new Spark(RobotMap.LIFT_MOTOR_2),
-                     //   new Spark(RobotMap.LIFT_MOTOR_3)
-               // ),
-               // true
-        );
-        LOGGER.info("Lift Subsystem Initialized properly!");
-        // Initialize the intake subsystem.
-        intakeSubsystem = new IntakeSubsystem(
-                new Spark(RobotMap.LEFT_INTAKE_MOTOR),
-                new Spark(RobotMap.RIGHT_INTAKE_MOTOR),
-                new Spark(RobotMap.PIVOT_INTAKE_MOTOR),
-                new DoubleSolenoid(RobotMap.PCM_ADDRESS, RobotMap.INTAKE_SOLENOID_1, RobotMap.INTAKE_SOLENOID_2)
-        );
-        LOGGER.info("Intake Subsystem Initialized properly!");
-        // Initialize the operator interface.
-        oi = new OI();
-
-
-        LOGGER.info("Robot initialization completed.");
+                RobotMap.GEARBOX_REVERSE_CHANNEL),
+        //dont change the pcm address 
+            new DoubleSolenoid(RobotMap.PCM_ADDRESS, RobotMap.GEARBOX_2_FORWARD_CHANNEL, RobotMap.GEARBOX_2_REVERSE_CHANNEL)
+);
     }
 
-    /**
-     * Returns the instance of the drive subsystem.
-     * @return the instance of the drive subsystem.
-     */
-    @Override
-    public void autonomousInit() {
-        timer.reset();
-        timer.start();
-    }
-
-    @Override
-    public void autonomousPeriodic() {
-        if(timer.get() < 2){
-            getDriveSubsystem().arcadeDrive(-0.75, 0);
-        } else {
-            getDriveSubsystem().arcadeDrive(0, 0);
+    public static Arm getLiftSubsystem() {
+        if(liftSubsystem != null) {
+            return liftSubsystem;
         }
-        if(timer.get() < 0.5){
-            //getIntakeSubsystem().pivotIntake(IntakeSubsystem.PivotDirection.DOWN);
-        } else {
-
-            //getIntakeSubsystem().stopPivot();
-        }
+        throw new RuntimeException("Lift subsystem has not yet been initialized!");
     }
 
     public static ExampleSubsystem getDriveSubsystem() {
@@ -155,18 +110,6 @@ public class Robot extends TimedRobot {
         }
         throw new RuntimeException("Drive subsystem has not yet been initialized!");
     }
-
-    /**
-     * Returns the instance of the lift subsystem.
-     * @return the instance of the lift subsystem.
-     */
-    public static Arm getLiftSubsystem() {
-        if(liftSubsystem != null) {
-            return liftSubsystem;
-        }
-        throw new RuntimeException("Lift subsystem has not yet been initialized!");
-    }
-
     /**
      * Returns the instance of the intake subsystem.
      * @return the instance of the intake subsystem.
@@ -262,5 +205,5 @@ public class Robot extends TimedRobot {
 
 
     }
-    private static Timer timer = new Timer();
+    //private static Timer timer = new Timer();
 }

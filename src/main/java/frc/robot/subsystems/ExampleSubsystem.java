@@ -14,6 +14,8 @@ public class ExampleSubsystem extends Subsystem {
     private DifferentialDrive differentialDrive;
     private GearMode gearMode;
     private DoubleSolenoid gearboxSolenoid;
+    private DoubleSolenoid gearboxSolenoid2;
+
 
     /**
      * This initializes the drive subsystem.
@@ -22,11 +24,12 @@ public class ExampleSubsystem extends Subsystem {
      * @param gearboxSolenoid Solenoid to be initialized.
      */
     public ExampleSubsystem(SpeedController leftSpeedController, SpeedController rightSpeedController,
-                          DoubleSolenoid gearboxSolenoid) {
+                          DoubleSolenoid gearboxSolenoid, DoubleSolenoid gearboxSolenoid2) {
         this.differentialDrive = new DifferentialDrive(leftSpeedController, rightSpeedController);
         differentialDrive.setSafetyEnabled(false);
         this.gearboxSolenoid = gearboxSolenoid;
         setGearMode(GearMode.LOW); //todo maybe this is part of the "every/other" bug?
+        this.gearboxSolenoid2 = gearboxSolenoid2;
         LOGGER.info("Drive subsystem initialization complete!");
     }
 

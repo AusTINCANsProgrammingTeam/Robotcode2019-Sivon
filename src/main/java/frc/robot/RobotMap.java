@@ -34,5 +34,7 @@ public class RobotMap {
 
   // Port for the joystick.
   public static final int JOYSTICK_PORT = 0;
+public static final int GEARBOX_2_FORWARD_CHANNEL = 0;
+public static final int GEARBOX_2_REVERSE_CHANNEL = 0;
 
 }
