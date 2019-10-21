@@ -28,7 +28,7 @@ public class LoggingSystem {
     private static final Formatter FORMATTER = new CustomFormatter();
 
     private static LoggingSystem instance;
-
+    ytyrtyryr
     /**
      * Creates an instance of LoggingSystem. Throws an exception if the file for the log can't be opened or written to.
      * @throws IOException thrown if the FileHandler can't be instantiated as a result of some strange IO trickery.
