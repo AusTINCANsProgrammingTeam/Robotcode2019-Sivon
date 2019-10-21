@@ -9,8 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class StopIntake extends Command {
-  public StopIntake() {
+public class ToggleForwardPistons extends Command {
+  public ToggleForwardPistons() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }

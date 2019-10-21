@@ -9,8 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class StopIntake extends Command {
-  public StopIntake() {
+public class ChangeLimit extends Command {
+  public ChangeLimit() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
